@@ -41,7 +41,8 @@ class App extends React.Component
                 <Content />
                 <Main />
               </>
-              : <></>
+              :
+              <></>
           }
         </Container>
 
