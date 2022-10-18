@@ -1,5 +1,6 @@
 import React from "react";
 import { withAuth0 } from "@auth0/auth0-react";
+import Hangout from "./Hangout";
 
 class Main extends React.Component
 {
@@ -8,6 +9,7 @@ class Main extends React.Component
     return(
       <>
         <h1>hello world</h1>
+        <Hangout />
       </>
     )
   }
