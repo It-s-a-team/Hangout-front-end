@@ -1,38 +1,56 @@
-import UserInput from './UserInput'
-import io from 'socket.io-client'
+//import io from 'socket.io-client'
 import React from 'react';
-import { Header } from 'react-bootstrap/lib/Modal';
+import Header from './Header';
+import Main from './Main';
+import Footer from './Footer';
+import Content from './Content';
+import LoginButton from './LoginButton'
+import LogoutButton from './LogoutButton'
+// `withAuth0` is for `Class` components
+import { withAuth0 } from '@auth0/auth0-react';
 
-const URL = process.env.URL || 'http://localhost:3002/messages';
+import Container from 'react-bootstrap/Container';
 
-const socket = io.connect(URL);
+//const URL = process.env.URL || 'http://localhost:3002/hangout';
+
+// const socket = io.connect(URL);
 
 
 class App extends React.Component
 {
-  // socket.emit('join', {clientId: socket.id})
-  submitData = (event) =>
-  {
-    event.preventDefault();
-    console.log(event.target.idea.value)
-    socket.emit('question', {
-      id: socket.id,
-      idea: event.target.idea.value
-    })
-  }
   render()
   {
     return (
       <>
-        <h1>hello world</h1>
-        <UserInput
-          submitData={ this.submitData } />
         <Header />
-        <Main />
+
+        <Container className="App">
+
+          { // if authenticated, see the `LogoutButton`
+            // if not authenticated, see the `LoginButton`
+            this.props.auth0.isAuthenticated
+              ? <LogoutButton />
+              : <LoginButton />
+          }
+
+          { // if authenticated, see the Content.js and Main.js
+            // if not authenticated, see a message asking them to log in
+            this.props.auth0.isAuthenticated
+              ?
+              <>
+                <Content />
+                <Main />
+              </>
+              : <></>
+          }
+        </Container>
+
         <Footer />
       </>
-    );
+    )
   }
 }
 
-export default App;
+// note that this is different than what we're used to
+// this line allows us to use `auth0` as props
+export default withAuth0(App);
