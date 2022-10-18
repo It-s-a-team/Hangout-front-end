@@ -1,5 +1,8 @@
 import React from "react";
+import { withAuth0 } from "@auth0/auth0-react";
+import io from 'socket.io-client';
 
+const socket = io.connect('http://localhost:3001');
 
 class Hangout extends React.Component
 {
@@ -12,4 +15,4 @@ class Hangout extends React.Component
     )
   }
 }
-export default Hangout;
+export default withAuth0(Hangout);
