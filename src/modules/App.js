@@ -11,10 +11,6 @@ import { withAuth0 } from '@auth0/auth0-react';
 
 import Container from 'react-bootstrap/Container';
 
-//const URL = process.env.URL || 'http://localhost:3002/hangout';
-
-// const socket = io.connect(URL);
-
 
 class App extends React.Component
 {
