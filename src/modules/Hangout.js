@@ -44,6 +44,7 @@ class Hangout extends React.Component
         socket.on('connect', () =>
         {
           console.log('socket id: ', socket.id);
+          // put player stuff here
         });
 
         socket.on('connect_error', (err) =>
