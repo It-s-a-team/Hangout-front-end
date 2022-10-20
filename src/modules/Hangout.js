@@ -3,6 +3,8 @@ import { withAuth0 } from '@auth0/auth0-react';
 import HangoutInput from './HangoutInput';
 import HangoutChat from './HangoutChat';
 import io from 'socket.io-client';
+import { Button } from 'react-bootstrap';
+import DifficultyInput from './Difficulty';
 
 // url of our hangout backend
 const URL = process.env.REACT_APP_SERVER || 'http://localhost:3001/hangout';
@@ -18,6 +20,7 @@ class Hangout extends React.Component
       socket: null,
       turn: '',
       lives: 0,
+      difficulty: 'easy',
       currentWord: '',
       gameMessage: '',
     };
@@ -34,23 +37,31 @@ class Hangout extends React.Component
       console.log('socket id: ', socket.id);
       // log the payload of our 'connect' event
       console.log(payload);
-      // emit a 'gameStart' event
-      socket.emit('gameStart', 'Game Starting!');
+
+      // socket.emit('gameStart', 'Game Starting!');
     });
-    socket.on('gameStart', (payload) => this.setState(payload));
+    socket.on('gameStart', (payload) => {
+      this.setState(payload);
+      console.log(payload);
+      console.log('game starting');
+    });
     socket.on('nextTurn', (payload) => this.setState(payload));
     socket.on('gameOver', (payload) => this.setState(payload));
     this.setState({
       socket: socket,
     });
-  */
 
-  joinSocket = async () =>
-  {
-    if (this.props.auth0.isAuthenticated)
-    {
-      try
-      {
+  handleStartGame = (e) => {
+    console.log('clicked');
+    console.log(this.state);
+    this.state.socket.emit('gameStart', {
+      difficulty: this.state.difficulty,
+    });
+  };
+
+  joinSocket = async () => {
+    if (this.props.auth0.isAuthenticated) {
+      try {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -129,10 +140,18 @@ class Hangout extends React.Component
     // here, we'll use our socket model to create an event with the letter to use as a guess
   };
 
-  componentDidMount()
-  {
-    this.joinSocket();
-    //this.connectToSocket();
+
+  handleDifficulty = (e) => {
+    e.preventDefault();
+    this.setState({
+      difficulty: e.target.value,
+    });
+    // console.log(e.target.value);
+  };
+
+  componentDidMount() {
+    this.connectToSocket();
+    // this.joinSocket();
     // /* we know this works!
     // const socket = io.connect(URL);
     // socket.on('connect', () =>
@@ -151,9 +170,14 @@ class Hangout extends React.Component
 
     return (
       <>
-        <h1>{ `Word: ${ this.state.currentWord }` }</h1>
-        <h2>{ `Lives: ${ this.state.lives }` }</h2>
-        <h2>{ this.state.gameMessage }</h2>
+
+        <Button variant='warning' onClick={this.handleStartGame}>
+          Start Game
+        </Button>
+        <DifficultyInput handleDifficulty={this.handleDifficulty} />
+        <h1>{`Word: ${this.state.currentWord}`}</h1>
+        <h2>{`Lives: ${this.state.lives}`}</h2>
+        <h2>{this.state.gameMessage}</h2>
 
         <HangoutInput
           handleEnterLetter={ this.handleEnterLetter }
