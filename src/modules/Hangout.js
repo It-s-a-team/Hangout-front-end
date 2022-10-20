@@ -4,10 +4,13 @@ import HangoutInput from './HangoutInput';
 import HangoutChat from './HangoutChat';
 import io from 'socket.io-client';
 
-const URL = process.env.URL || 'http://localhost:3002/hangout';
+// url of our hangout backend
+const URL = process.env.REACT_APP_SERVER || 'http://localhost:3001/hangout';
 
-class Hangout extends React.Component {
-  constructor(props) {
+class Hangout extends React.Component
+{
+  constructor(props)
+  {
     super(props);
     this.state = {
       currentLetter: '',
@@ -20,11 +23,18 @@ class Hangout extends React.Component {
     };
   }
 
+  /*
   connectToSocket = async () => {
+    // connect to our express server using the URL in our .env
     const socket = await io.connect(URL);
+
+    // as soon as we 'connect'
     socket.on('connect', (payload) => {
+      // log our socket id
       console.log('socket id: ', socket.id);
+      // log the payload of our 'connect' event
       console.log(payload);
+      // emit a 'gameStart' event
       socket.emit('gameStart', 'Game Starting!');
     });
     socket.on('gameStart', (payload) => this.setState(payload));
@@ -33,11 +43,14 @@ class Hangout extends React.Component {
     this.setState({
       socket: socket,
     });
-  };
+  */
 
-  joinSocket = async () => {
-    if (this.props.auth0.isAuthenticated) {
-      try {
+  joinSocket = async () =>
+  {
+    if (this.props.auth0.isAuthenticated)
+    {
+      try
+      {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -52,31 +65,37 @@ class Hangout extends React.Component {
             token: jwt,
           },
         });
-        socket.on('connect', () => {
+        console.log('socket object with auth headers: ', socket);
+        socket.on('connect', () =>
+        {
           console.log('socket id: ', socket.id);
           // put player stuff here
         });
 
-        socket.on('connect_error', (err) => {
+        socket.on('connect_error', (err) =>
+        {
           console.log('err instanceof Error: ', err instanceof Error); // true
           console.log('err.message: ', err.message); // not authorized
           console.log('err.data: ', err.data); // { content: "Please retry later" }
         });
         const payload = {
           playerId: socket.id,
-          message: 'hey there',
+          message: 'hey there, you made it in!',
           jwt: jwt,
         };
 
         socket.emit('hello', payload);
-      } catch (error) {
+      }
+      catch (error)
+      {
         console.log('problem joining socket: ', error.response);
       }
     }
   };
 
   // this function changes state when user inputs a letter in the text box
-  handleEnterLetter = (e) => {
+  handleEnterLetter = (e) =>
+  {
     e.preventDefault();
     console.log('entered letter: ', e.target.value);
     this.setState({
@@ -85,7 +104,8 @@ class Hangout extends React.Component {
   };
 
   // this function is where we'll do socket stuff
-  handleSubmitLetter = (e) => {
+  handleSubmitLetter = (e) =>
+  {
     e.preventDefault();
     // console.log(e.target);
     this.state.socket.emit('letterSubmit', this.state.currentLetter);
@@ -93,7 +113,8 @@ class Hangout extends React.Component {
   };
 
   // this function changes state when user inputs a letter in the text box
-  handleEnterChat = (e) => {
+  handleEnterChat = (e) =>
+  {
     e.preventDefault();
     console.log('entered message: ', e.target.value);
     this.setState({
@@ -102,14 +123,16 @@ class Hangout extends React.Component {
   };
 
   // this function is where we'll do socket stuff
-  handleSubmitChat = (e) => {
+  handleSubmitChat = (e) =>
+  {
     e.preventDefault();
     // here, we'll use our socket model to create an event with the letter to use as a guess
   };
 
-  componentDidMount() {
-    this.connectToSocket();
-    // this.joinSocket();
+  componentDidMount()
+  {
+    this.joinSocket();
+    //this.connectToSocket();
     // /* we know this works!
     // const socket = io.connect(URL);
     // socket.on('connect', () =>
@@ -118,25 +141,27 @@ class Hangout extends React.Component {
     // });
   }
 
-  render() {
+  render()
+  {
     console.log(this.state);
-    if (this.state.socket) {
+    if (this.state.socket)
+    {
       console.log(this.state.socket.id);
     }
 
     return (
       <>
-        <h1>{`Word: ${this.state.currentWord}`}</h1>
-        <h2>{`Lives: ${this.state.lives}`}</h2>
-        <h2>{this.state.gameMessage}</h2>
+        <h1>{ `Word: ${ this.state.currentWord }` }</h1>
+        <h2>{ `Lives: ${ this.state.lives }` }</h2>
+        <h2>{ this.state.gameMessage }</h2>
 
         <HangoutInput
-          handleEnterLetter={this.handleEnterLetter}
-          handleSubmitLetter={this.handleSubmitLetter}
+          handleEnterLetter={ this.handleEnterLetter }
+          handleSubmitLetter={ this.handleSubmitLetter }
         />
         <HangoutChat
-          handleEnterChat={this.handleEnterChat}
-          handleSubmitChat={this.handleSubmitChat}
+          handleEnterChat={ this.handleEnterChat }
+          handleSubmitChat={ this.handleSubmitChat }
         />
       </>
     );
