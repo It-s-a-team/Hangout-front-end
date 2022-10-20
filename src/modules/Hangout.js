@@ -27,12 +27,14 @@ class Hangout extends React.Component
   }
 
   /*
-  connectToSocket = async () => {
+  connectToSocket = async () =>
+  {
     // connect to our express server using the URL in our .env
     const socket = await io.connect(URL);
 
     // as soon as we 'connect'
-    socket.on('connect', (payload) => {
+    socket.on('connect', (payload) =>
+    {
       // log our socket id
       console.log('socket id: ', socket.id);
       // log the payload of our 'connect' event
@@ -40,7 +42,8 @@ class Hangout extends React.Component
 
       // socket.emit('gameStart', 'Game Starting!');
     });
-    socket.on('gameStart', (payload) => {
+    socket.on('gameStart', (payload) =>
+    {
       this.setState(payload);
       console.log(payload);
       console.log('game starting');
@@ -50,8 +53,10 @@ class Hangout extends React.Component
     this.setState({
       socket: socket,
     });
+    */
 
-  handleStartGame = (e) => {
+  handleStartGame = (e) =>
+  {
     console.log('clicked');
     console.log(this.state);
     this.state.socket.emit('gameStart', {
@@ -59,9 +64,13 @@ class Hangout extends React.Component
     });
   };
 
-  joinSocket = async () => {
-    if (this.props.auth0.isAuthenticated) {
-      try {
+
+  joinSocket = async () =>
+  {
+    if (this.props.auth0.isAuthenticated)
+    {
+      try
+      {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -89,13 +98,17 @@ class Hangout extends React.Component
           console.log('err.message: ', err.message); // not authorized
           console.log('err.data: ', err.data); // { content: "Please retry later" }
         });
-        const payload = {
-          playerId: socket.id,
-          message: 'hey there, you made it in!',
-          jwt: jwt,
-        };
-
-        socket.emit('hello', payload);
+        socket.on('gameStart', (payload) =>
+        {
+          this.setState(payload);
+          console.log(payload);
+          console.log('game starting');
+        });
+        socket.on('nextTurn', (payload) => this.setState(payload));
+        socket.on('gameOver', (payload) => this.setState(payload));
+        this.setState({
+          socket: socket,
+        });
       }
       catch (error)
       {
@@ -103,6 +116,7 @@ class Hangout extends React.Component
       }
     }
   };
+
 
   // this function changes state when user inputs a letter in the text box
   handleEnterLetter = (e) =>
@@ -141,7 +155,8 @@ class Hangout extends React.Component
   };
 
 
-  handleDifficulty = (e) => {
+  handleDifficulty = (e) =>
+  {
     e.preventDefault();
     this.setState({
       difficulty: e.target.value,
@@ -149,15 +164,11 @@ class Hangout extends React.Component
     // console.log(e.target.value);
   };
 
-  componentDidMount() {
-    this.connectToSocket();
-    // this.joinSocket();
-    // /* we know this works!
-    // const socket = io.connect(URL);
-    // socket.on('connect', () =>
-    // {
-    //   console.log('socket id: ', socket.id);
-    // });
+  componentDidMount()
+  {
+    //this.connectToSocket();
+    this.joinSocket();
+
   }
 
   render()
@@ -171,13 +182,13 @@ class Hangout extends React.Component
     return (
       <>
 
-        <Button variant='warning' onClick={this.handleStartGame}>
+        <Button variant='warning' onClick={ this.handleStartGame }>
           Start Game
         </Button>
-        <DifficultyInput handleDifficulty={this.handleDifficulty} />
-        <h1>{`Word: ${this.state.currentWord}`}</h1>
-        <h2>{`Lives: ${this.state.lives}`}</h2>
-        <h2>{this.state.gameMessage}</h2>
+        <DifficultyInput handleDifficulty={ this.handleDifficulty } />
+        <h1>{ `Word: ${ this.state.currentWord }` }</h1>
+        <h2>{ `Lives: ${ this.state.lives }` }</h2>
+        <h2>{ this.state.gameMessage }</h2>
 
         <HangoutInput
           handleEnterLetter={ this.handleEnterLetter }
@@ -191,4 +202,5 @@ class Hangout extends React.Component
     );
   }
 }
+
 export default withAuth0(Hangout);
