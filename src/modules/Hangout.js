@@ -3,6 +3,8 @@ import { withAuth0 } from '@auth0/auth0-react';
 import HangoutInput from './HangoutInput';
 import HangoutChat from './HangoutChat';
 import io from 'socket.io-client';
+import { Button } from 'react-bootstrap';
+import DifficultyInput from './Difficulty';
 
 const URL = process.env.URL || 'http://localhost:3002/hangout';
 
@@ -15,6 +17,7 @@ class Hangout extends React.Component {
       socket: null,
       turn: '',
       lives: 0,
+      difficulty: 'easy',
       currentWord: '',
       gameMessage: '',
     };
@@ -25,13 +28,24 @@ class Hangout extends React.Component {
     socket.on('connect', (payload) => {
       console.log('socket id: ', socket.id);
       console.log(payload);
-      socket.emit('gameStart', 'Game Starting!');
+      // socket.emit('gameStart', 'Game Starting!');
     });
-    socket.on('gameStart', (payload) => this.setState(payload));
+    socket.on('gameStart', (payload) => {
+      this.setState(payload);
+      console.log(payload);
+      console.log('game starting');
+    });
     socket.on('nextTurn', (payload) => this.setState(payload));
     socket.on('gameOver', (payload) => this.setState(payload));
     this.setState({
       socket: socket,
+    });
+  };
+  handleStartGame = (e) => {
+    console.log('clicked');
+    console.log(this.state);
+    this.state.socket.emit('gameStart', {
+      difficulty: this.state.difficulty,
     });
   };
 
@@ -107,6 +121,14 @@ class Hangout extends React.Component {
     // here, we'll use our socket model to create an event with the letter to use as a guess
   };
 
+  handleDifficulty = (e) => {
+    e.preventDefault();
+    this.setState({
+      difficulty: e.target.value,
+    });
+    // console.log(e.target.value);
+  };
+
   componentDidMount() {
     this.connectToSocket();
     // this.joinSocket();
@@ -126,6 +148,10 @@ class Hangout extends React.Component {
 
     return (
       <>
+        <Button variant='warning' onClick={this.handleStartGame}>
+          Start Game
+        </Button>
+        <DifficultyInput handleDifficulty={this.handleDifficulty} />
         <h1>{`Word: ${this.state.currentWord}`}</h1>
         <h2>{`Lives: ${this.state.lives}`}</h2>
         <h2>{this.state.gameMessage}</h2>
