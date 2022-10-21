@@ -5,6 +5,7 @@ import HangoutChat from './HangoutChat';
 import io from 'socket.io-client';
 import { Button } from 'react-bootstrap';
 import DifficultyInput from './Difficulty';
+import '../css/App.css';
 
 // url of our hangout backend
 const URL = process.env.REACT_APP_SERVER || 'http://localhost:3001/hangout';
@@ -182,13 +183,19 @@ class Hangout extends React.Component
     return (
       <>
 
-        <Button variant='warning' onClick={ this.handleStartGame }>
+        <Button variant="outline-success" onClick={ this.handleStartGame }>
           Start Game
         </Button>
         <DifficultyInput handleDifficulty={ this.handleDifficulty } />
         <h1>{ `Word: ${ this.state.currentWord }` }</h1>
         <h2>{ `Lives: ${ this.state.lives }` }</h2>
         <h2>{ this.state.gameMessage }</h2>
+
+        <img
+          class="hangoutGuy"
+          src={require(`./Images/Hangout-Guy-${this.state.lives}.png`)}
+          alt="Hangout-Guy">
+        </img>
 
         <HangoutInput
           handleEnterLetter={ this.handleEnterLetter }
