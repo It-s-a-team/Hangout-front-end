@@ -14,7 +14,7 @@ class Footer extends React.Component
 
       <div className ='text-center p-3 text-white' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
         © 2022 Copyright:
-        <a className ='text-white'> Hangout Team </a>
+        <p className ='text-white'> Hangout Team </p>
       </div>
     
   );
