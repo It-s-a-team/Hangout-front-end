@@ -7,7 +7,7 @@ class Header extends React.Component
   {
     return (
       <>
-        <p>Hangout!</p>
+        <h1>Hangout!</h1>
       </>
     )
   }
