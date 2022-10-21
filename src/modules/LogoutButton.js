@@ -10,6 +10,7 @@ const LogoutButton = () =>
     <Button
       style={ { width: "100px", margin: "auto" } }
       onClick={ () => logout({ returnTo: window.location.origin }) }
+      variant="outline-info"
     >
       Log Out
     </Button>

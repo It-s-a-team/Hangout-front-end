@@ -13,6 +13,7 @@ const LoginButton = () =>
     
       // style={ { width: "100px", margin: "auto" } }
       onClick={ () => loginWithRedirect() }
+      variant="outline-primary"
     >
       Sign in
     </Button>

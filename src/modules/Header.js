@@ -1,4 +1,5 @@
 import React from "react";
+import '../css/App.css';
 
 
 class Header extends React.Component
@@ -7,7 +8,7 @@ class Header extends React.Component
   {
     return (
       <>
-        <h1>Hangout!</h1>
+        src={require(`./Images/Hangout-Logo.png`)}
       </>
     )
   }
