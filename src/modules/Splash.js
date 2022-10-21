@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Header from './Header';
 import LoginButton from './LoginButton'
 import '../css/Splash.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +20,7 @@ export default class Splash extends Component {
                 <div class="container">
                   <div class="row">
                     <div class="col-lg-10 col-xl-7 mx-auto">
+                      <Header/>
                       <h3 class="display-4">Login Page!</h3>
                       <form>
                         <div class="d-grid gap-2 mt-2">
