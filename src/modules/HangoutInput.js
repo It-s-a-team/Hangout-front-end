@@ -22,7 +22,9 @@ class HangoutInput extends React.Component
               maxLength={ 1 }
             >
             </Form.Control>
-            <Button type="submit">Submit your guess</Button>
+            <Button 
+              type="submit"
+              variant="outline-info">Submit your guess</Button>
           </Form.Group>
         </Form>
       </>
