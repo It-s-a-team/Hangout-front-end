@@ -1,4 +1,5 @@
 import React from "react";
+import '../css/Content.css';
 
 // withAuth0, because this is a Class-based component
 import { withAuth0 } from "@auth0/auth0-react";

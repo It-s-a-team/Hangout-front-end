@@ -4,8 +4,9 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import Content from './Content';
-import LoginButton from './LoginButton'
+// import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
+import Splash from './Splash';
 // `withAuth0` is for `Class` components
 import { withAuth0 } from '@auth0/auth0-react';
 
@@ -18,7 +19,7 @@ class App extends React.Component
   {
     return (
       <>
-        <Header />
+       
 
         <Container className="App">
 
@@ -26,7 +27,7 @@ class App extends React.Component
             // if not authenticated, see the `LoginButton`
             this.props.auth0.isAuthenticated
               ? <LogoutButton />
-              : <LoginButton />
+              : <Splash />
           }
 
           { // if authenticated, see the Content.js and Main.js

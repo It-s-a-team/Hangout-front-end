@@ -1,15 +1,23 @@
 import React from "react";
+import '../css/index.css';
+
+
 
 
 class Footer extends React.Component
 {
   render()
   {
-    return(
-      <>
-        <p>© Hangout Team 2022</p>
-      </>
-    )
-  }
+
+    return (
+      
+
+      <div className ='text-center p-3 text-white' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
+        © 2022 Copyright:
+        <a className ='text-white'> Hangout Team </a>
+      </div>
+    
+  );
+}
 }
 export default Footer;
