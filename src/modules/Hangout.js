@@ -11,8 +11,10 @@ import RoomInput from './RoomInput';
 // url of our hangout backend
 const URL = process.env.REACT_APP_SERVER || 'http://localhost:3001/hangout';
 
-class Hangout extends React.Component {
-  constructor(props) {
+class Hangout extends React.Component
+{
+  constructor(props)
+  {
     super(props);
     this.state = {
       currentLetter: '',
@@ -31,36 +33,8 @@ class Hangout extends React.Component {
     };
   }
 
-  /*
-  connectToSocket = async () =>
+  handleStartGame = (e) =>
   {
-    // connect to our express server using the URL in our .env
-    const socket = await io.connect(URL);
-
-    // as soon as we 'connect'
-    socket.on('connect', (payload) =>
-    {
-      // log our socket id
-      console.log('socket id: ', socket.id);
-      // log the payload of our 'connect' event
-      console.log(payload);
-
-      // socket.emit('gameStart', 'Game Starting!');
-    });
-    socket.on('gameStart', (payload) =>
-    {
-      this.setState(payload);
-      console.log(payload);
-      console.log('game starting');
-    });
-    socket.on('nextTurn', (payload) => this.setState(payload));
-    socket.on('gameOver', (payload) => this.setState(payload));
-    this.setState({
-      socket: socket,
-    });
-    */
-
-  handleStartGame = (e) => {
     console.log('clicked');
     console.log(this.state);
     this.state.socket.emit('gameStart', {
@@ -68,9 +42,12 @@ class Hangout extends React.Component {
     });
   };
 
-  joinSocket = async () => {
-    if (this.props.auth0.isAuthenticated) {
-      try {
+  joinSocket = async () =>
+  {
+    if (this.props.auth0.isAuthenticated)
+    {
+      try
+      {
         // generate a token with auth0
         // we'll use it to make a secure request with to our server
         const res = await this.props.auth0.getIdTokenClaims();
@@ -78,55 +55,60 @@ class Hangout extends React.Component {
         // this is the raw token
         // note the double underscore __ in .__raw
         const jwt = res.__raw;
-        console.log('jwt token: ', jwt);
 
         const socket = io.connect(URL, {
           auth: {
             token: jwt,
           },
         });
-        // console.log(this.props.auth0.user.email);
-        console.log('socket object with auth headers: ', socket);
-        socket.on('connect', () => {
-          console.log('socket id: ', socket.id);
-          // put player stuff here
+        socket.on('connect', () =>
+        {
+          // console.log('socket id: ', socket.id);
         });
 
-        socket.on('connect_error', (err) => {
-          console.log('err instanceof Error: ', err instanceof Error); // true
+        socket.on('connect_error', (err) =>
+        {
+          console.log('err instanceof Error: ', err instanceof Error); // will return `true` if there is an error connecting to the /hangout namespace with auth0
           console.log('err.message: ', err.message); // not authorized
           console.log('err.data: ', err.data); // { content: "Please retry later" }
         });
-        socket.on('gameStart', (payload) => {
+
+        socket.on('gameStart', (payload) =>
+        {
           this.setState(payload);
-          console.log(payload);
-          console.log('game starting');
         });
-        socket.on('newRoom', (payload) => {
-          console.log(payload);
+
+        socket.on('newRoom', (payload) =>
+        {
           this.setState({
             rooms: payload.rooms,
             players: payload.newPlayerList,
           });
         });
+
         socket.on('chat', (payload) =>
           this.setState({
             chatLogs: payload,
           })
         );
+
         socket.on('nextTurn', (payload) => this.setState(payload));
+
         socket.on('gameOver', (payload) => this.setState(payload));
         this.setState({
           socket: socket,
         });
-      } catch (error) {
+      }
+      catch (error)
+      {
         console.log('problem joining socket: ', error.response);
       }
     }
   };
 
   // this function changes state when user inputs a letter in the text box
-  handleEnterLetter = (e) => {
+  handleEnterLetter = (e) =>
+  {
     e.preventDefault();
     console.log('entered letter: ', e.target.value);
     this.setState({
@@ -134,57 +116,55 @@ class Hangout extends React.Component {
     });
   };
 
-  // this function is where we'll do socket stuff
-  handleSubmitLetter = (e) => {
+  // here, we'll use our socket model create an observable for user guesses
+  handleSubmitLetter = (e) =>
+  {
     e.preventDefault();
-    // console.log(e.target);
     this.state.socket.emit('letterSubmit', this.state.currentLetter);
-    // here, we'll use our socket model to create an event with the letter to use as a guess
   };
 
   // this function changes state when user inputs a letter in the text box
-  handleEnterChat = (e) => {
+  handleEnterChat = (e) =>
+  {
     e.preventDefault();
-    console.log('entered message: ', e.target.value);
     this.setState({
       chatMessage: e.target.value,
     });
   };
 
-  // this function is where we'll do socket stuff
-  handleSubmitChat = (e) => {
+  // here, we'll use our socket model create an observable for chat messages
+  handleSubmitChat = (e) =>
+  {
     e.preventDefault();
     this.state.socket.emit('chat', {
       room: this.state.currentRoom,
-      message: `${this.props.auth0.user.name}: ${this.state.chatMessage}`,
+      message: `${ this.props.auth0.user.name }: ${ this.state.chatMessage }`,
     });
-    console.log(this.state.chatMessage);
-    // here, we'll use our socket model to create an event with the letter to use as a guess
   };
 
-  handleDifficulty = (e) => {
+  handleDifficulty = (e) =>
+  {
     e.preventDefault();
     this.setState({
       difficulty: e.target.value,
     });
-    // console.log(e.target.value);
   };
 
-  handleRoomInput = (e) => {
+  handleRoomInput = (e) =>
+  {
     e.preventDefault();
     this.setState({
       roomInput: e.target.value,
     });
   };
 
-  handleRoomSubmit = (e) => {
+  handleRoomSubmit = (e) =>
+  {
     e.preventDefault();
-    // console.log(e.target);
-    // console.log(this.state.roomInput);
+
     let newRoom = this.state.roomInput;
     let oldRoom = this.state.currentRoom;
 
-    console.log(this.props.auth0.user);
     this.setState({
       currentRoom: this.state.roomInput,
     });
@@ -196,50 +176,54 @@ class Hangout extends React.Component {
     });
   };
 
-  componentDidMount() {
-    //this.connectToSocket();
+  componentDidMount()
+  {
     this.joinSocket();
   }
 
-  render() {
-    console.log(this.state);
-    if (this.state.socket) {
-      console.log(this.state.socket.id);
+  render()
+  {
+    if (this.state.socket)
+    {
+      // console.log(this.state.socket.id);
     }
 
     let chatList = this.state.chatLogs.map((str) => (
-      <ListGroupItem>{str}</ListGroupItem>
+      <ListGroupItem>{ str }</ListGroupItem>
     ));
 
     return (
       <>
         <RoomInput
-          handleRoomInput={this.handleRoomInput}
-          handleRoomSubmit={this.handleRoomSubmit}
+          handleRoomInput={ this.handleRoomInput }
+          handleRoomSubmit={ this.handleRoomSubmit }
         />
+
         <Button variant="outline-success" onClick={ this.handleStartGame }>
           Start Game
         </Button>
-        <DifficultyInput handleDifficulty={this.handleDifficulty} />
-        <h1>{`Word: ${this.state.currentWord}`}</h1>
-        <h2>{`Lives: ${this.state.lives}`}</h2>
-        <h2>{this.state.gameMessage}</h2>
+
+        <DifficultyInput handleDifficulty={ this.handleDifficulty } />
+
+        <h1>{ `Word: ${ this.state.currentWord }` }</h1>
+        <h2>{ `Lives: ${ this.state.lives }` }</h2>
+        <h2>{ this.state.gameMessage }</h2>
 
         <img
-          class="hangoutGuy"
-          src={require(`./Images/Hangout-Guy-${this.state.lives}.png`)}
+          className="hangoutGuy"
+          src={ require(`./Images/Hangout-Guy-${ this.state.lives }.png`) }
           alt="Hangout-Guy">
         </img>
 
         <HangoutInput
-          handleEnterLetter={this.handleEnterLetter}
-          handleSubmitLetter={this.handleSubmitLetter}
+          handleEnterLetter={ this.handleEnterLetter }
+          handleSubmitLetter={ this.handleSubmitLetter }
         />
         <HangoutChat
-          handleEnterChat={this.handleEnterChat}
-          handleSubmitChat={this.handleSubmitChat}
+          handleEnterChat={ this.handleEnterChat }
+          handleSubmitChat={ this.handleSubmitChat }
         />
-        <ListGroup>{chatList}</ListGroup>
+        <ListGroup>{ chatList }</ListGroup>
       </>
     );
   }

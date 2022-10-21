@@ -1,10 +1,7 @@
 import React from "react";
 import '../css/Content.css';
-
-// withAuth0, because this is a Class-based component
+// importing withAuth0, because this is a Class-based component
 import { withAuth0 } from "@auth0/auth0-react";
-
-
 
 class Content extends React.Component
 {
@@ -14,7 +11,6 @@ class Content extends React.Component
       <>
         <div className="content">
           <h1>User Profile</h1>
-          {/* { //console.log('user object from google/auth0', this.props.auth0.user) } */ }
           <img
             src={ this.props.auth0.user.picture } referrerPolicy="no-referrer"
             alt={ this.props.auth0.user.picture }
