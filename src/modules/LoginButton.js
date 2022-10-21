@@ -1,6 +1,5 @@
 import React from "react";
-
-// `useAuth0` is for `functional` components
+// importing `useAuth0`, because this is a functional component
 import { useAuth0 } from "@auth0/auth0-react";
 import Button from "react-bootstrap/Button";
 
@@ -10,8 +9,7 @@ const LoginButton = () =>
 
   return (
     <Button
-    
-      // style={ { width: "100px", margin: "auto" } }
+      style={ { width: "100px", margin: "auto" } }
       onClick={ () => loginWithRedirect() }
       variant="outline-primary"
     >

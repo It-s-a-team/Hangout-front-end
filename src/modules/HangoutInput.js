@@ -2,7 +2,6 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-
 class HangoutInput extends React.Component
 {
   render()
@@ -22,7 +21,7 @@ class HangoutInput extends React.Component
               maxLength={ 1 }
             >
             </Form.Control>
-            <Button 
+            <Button
               type="submit"
               variant="outline-info">Submit your guess</Button>
           </Form.Group>

@@ -1,17 +1,12 @@
-//import io from 'socket.io-client'
 import React from 'react';
-// import Header from './Header';
+// `withAuth0` is for `Class` components
+import { withAuth0 } from '@auth0/auth0-react';
 import Main from './Main';
 import Footer from './Footer';
 import Content from './Content';
-// import LoginButton from './LoginButton'
 import LogoutButton from './LogoutButton'
 import Splash from './Splash';
-// `withAuth0` is for `Class` components
-import { withAuth0 } from '@auth0/auth0-react';
-
 import Container from 'react-bootstrap/Container';
-
 
 class App extends React.Component
 {
@@ -19,8 +14,6 @@ class App extends React.Component
   {
     return (
       <>
-       
-
         <Container className="App">
 
           { // if authenticated, see the `LogoutButton`
