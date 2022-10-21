@@ -26,7 +26,7 @@ export default class Splash extends Component {
                         <div class="d-grid gap-2 mt-2">
                           <LoginButton />
                         </div>
-                          <div class="text-center d-flex justify-content-between mt-4"><p>Code by <a href="#" class="font-italic text-muted"> <u>Hangout Team</u></a></p></div>
+                          <div class="text-center d-flex justify-content-between mt-4"><p>Code by <a class="font-italic text-muted"> <u>Hangout Team</u></a></p></div>
                       </form>
                     </div>
                   </div>
