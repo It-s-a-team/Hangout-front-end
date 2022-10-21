@@ -10,10 +10,11 @@ const LoginButton = () =>
 
   return (
     <Button
-      style={ { width: "100px", margin: "auto" } }
+    
+      // style={ { width: "100px", margin: "auto" } }
       onClick={ () => loginWithRedirect() }
     >
-      Log In
+      Sign in
     </Button>
   )
 };
